@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Большое Сердце</title>
+  <style>
+    /* Заполняем окно и выравниваем по центру */
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #fce4ec;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Контейнер для сердца и текста 
+       - 80vw означает 80% ширины экрана,
+       - max-width: 500px не даёт сердцу
+         стать слишком огромным на больших экранах */
+    .container {
+      position: relative;
+      width: 80vw;
+      height: 80vw;
+      max-width: 500px;
+      max-height: 500px;
+    }
+
+    /* Сердце */
+    .heart {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: red;
+      transform: rotate(-45deg);
+      animation: beat 1s infinite;
+      z-index: 1; 
+    }
+    /* Две полусферы для верха сердца */
+    .heart::before,
+    .heart::after {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-color: red;
+      border-radius: 50%;
+    }
+    .heart::before {
+      /* 50% высоты сердца, чтобы 
+         полусфера располагалась ровно над "квадратом" */
+      top: -50%;
+      left: 0;
+    }
+    .heart::after {
+      top: 0;
+      left: 50%;
+    }
+
+    /* Анимация биения сердца */
+    @keyframes beat {
+      0%, 100% {
+        transform: scale(1) rotate(-45deg);
+      }
+      50% {
+        transform: scale(1.2) rotate(-45deg);
+      }
+    }
+
+    /* Текст внутри сердца */
+    .message {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      /* 80% от ширины контейнера, чтобы не выходить за границы */
+      width: 80%;
+      /* clamp(min, preferred, max): 
+         - не меньше 20px,
+         - масштабировать от 5vw,
+         - не больше 36px */
+      font-size: clamp(18px, 5vw, 36px);
+      text-align: center;
+      color: white;
+      line-height: 1.3;
+      z-index: 2; /* Текст выше сердца */
+      pointer-events: none;
+      white-space: normal;
+      word-wrap: break-word;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="heart"></div>
+    <div class="message" id="message"></div>
+  </div>
+
+  <script>
+    // Массив с поздравительными фразами
+    const messages = [
+      "Ты красивая.",
+      "Ты умная.",
+      "Твои волосы словно водопад.",
+      "Твои глаза — как океан нежности.",
+      "Твоя улыбка озаряет день.",
+      "Твоя доброта согревает сердца.",
+      "Твоя энергия вдохновляет.",
+      "Твоя смелость восхищает.",
+      "Твой голос — музыка для души.",
+      "Ты неповторимая и удивительная."
+    ];
+
+    let index = 0;
+    const messageEl = document.getElementById("message");
+
+    function showMessage() {
+      messageEl.textContent = messages[index];
+      index = (index + 1) % messages.length;
+    }
+
+    // Показываем первое сообщение сразу
+    showMessage();
+    // Меняем сообщение каждые 2 секунды
+    setInterval(showMessage, 2000);
+  </script>
+</body>
+</html>
